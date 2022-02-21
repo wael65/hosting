@@ -3,7 +3,11 @@ version: 2.1
 jobs:
   deploy:
     docker:
+<<<<<<< HEAD
       - image: cimg/node: 16.13.1
+=======
+      - image: cimg/node:16.13.1
+>>>>>>> eb2092e6f94bbdcbd1d6da82942b18f908685d4d
 
     steps:
       - checkout

@@ -1,42 +1,44 @@
 version: 2.1
 
 jobs:
-  deploy:
+  deploy: 
     docker:
-<<<<<<< HEAD
-      - image: cimg/node: 16.13.1
-=======
       - image: cimg/node:16.13.1
->>>>>>> eb2092e6f94bbdcbd1d6da82942b18f908685d4d
-
     steps:
       - checkout
-      - restore_cache:  
+
+      # Download and cache dependencies
+      - restore_cache:
           keys:
-            - v1-dependencies-{{checksum "package.json"}}
+            # Find a cache corresponding to this specific package.json checksum
+            # when this file is changed, this key will fail
+            - v1-dependencies-{{ checksum "package.json" }}
+            # Find the most recently generated cache used from any branch
             - v1-dependencies-
-      - run:
-          name: install dependencies
-          command: npm install
-         
+
+      - run: 
+          name: Install Dependencies
+          command: npm instal
+
       - save_cache:
-          path:
+          paths:
             - node_modules
-          key: v1-dependencies--{{checksum "package.json"}}
+          key: v1-dependencies-{{ checksum "package.json" }}
+
+      # run tests!
+      - run:
+          name: Run Tests
+          command: npm run test
 
       - run:
-          name: run tests
-          command: npm run test       
+          name: Build 
+          command: npm run build
 
       - run:
-          name: build
-          command: npm run build 
-
-      - run:
-          name: Deploy at netlify
-          command: npm run deploy  
+          name: Deploy at Netlify 
+          command: npm run deploy
 
 workflows:
-    build_deploy:
-      jobs:
-         - deploy              
+  build_deploy:
+    jobs:
+      - deploy
